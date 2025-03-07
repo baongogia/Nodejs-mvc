@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #3498db, #8e44ad);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+
+      label {
+        font-size: 14px;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+      }
+
+      .btn-login {
+        background: #3498db;
+        color: white;
+        margin-top: 10px;
+      }
+
+      .btn-login:hover {
+        background: #2980b9;
+      }
+
+      .btn-register {
+        background: #2ecc71;
+        color: white;
+        margin-top: 10px;
+      }
+
+      .btn-register:hover {
+        background: #27ae60;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      .switch-link {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .switch-link a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .switch-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Đăng nhập</h2>
+
+      <p id="error-message" class="error-message"></p>
+
+      <form id="login-form">
+        <div class="input-group">
+          <label>Tên đăng nhập:</label>
+          <input type="text" name="username" required />
+        </div>
+
+        <div class="input-group">
+          <label>Mật khẩu:</label>
+          <input type="password" name="password" required />
+        </div>
+
+        <button type="submit" class="btn btn-login">🔑 Đăng nhập</button>
+      </form>
+
+      <p class="switch-link">
+        Chưa có tài khoản? <a href="/register">Đăng ký ngay</a>
+      </p>
+    </div>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(this);
+
+          const response = await fetch("/api/users/login", {
+            method: "POST",
+            body: JSON.stringify({
+              username: formData.get("username"),
+              password: formData.get("password"),
+            }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = await response.json();
+
+          if (result.token) {
+            document.cookie = `token=${result.token}; path=/`;
+            window.location.href = "/dashboard";
+          } else {
+            document.getElementById("error-message").innerText =
+              result.error || "Sai username hoặc mật khẩu!";
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng ký</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #2ecc71, #16a085);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        text-align: center;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+        text-align: left;
+      }
+
+      label {
+        font-size: 14px;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #2ecc71;
+        box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+      }
+
+      .btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+      }
+
+      .btn-register {
+        background: #2ecc71;
+        color: white;
+        margin-top: 10px;
+      }
+
+      .btn-register:hover {
+        background: #27ae60;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      .switch-link {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .switch-link a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .switch-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Đăng ký</h2>
+
+      <p id="error-message" class="error-message"></p>
+
+      <form id="register-form">
+        <div class="input-group">
+          <label>Tên đăng nhập:</label>
+          <input type="text" name="username" required />
+        </div>
+
+        <div class="input-group">
+          <label>Mật khẩu:</label>
+          <input type="password" name="password" required />
+        </div>
+
+        <div class="input-group">
+          <label>Nhập lại mật khẩu:</label>
+          <input type="password" name="confirmPassword" required />
+        </div>
+
+        <div class="input-group">
+          <label>Quyền người dùng:</label>
+          <select
+            name="role"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+            "
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-register">📝 Đăng ký</button>
+      </form>
+
+      <p class="switch-link">
+        Đã có tài khoản? <a href="/login">Đăng nhập ngay</a>
+      </p>
+    </div>
+
+    <script>
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(this);
+          const username = formData.get("username");
+          const password = formData.get("password");
+          const confirmPassword = formData.get("confirmPassword");
+          const role = formData.get("role");
+
+          if (password !== confirmPassword) {
+            document.getElementById("error-message").innerText =
+              "Mật khẩu nhập lại không khớp!";
+            return;
+          }
+
+          const response = await fetch("/api/users/register", {
+            method: "POST",
+            body: JSON.stringify({ username, password, role }), // 🟢 Đảm bảo gửi role
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            window.location.href = "/login";
+          } else {
+            document.getElementById("error-message").innerText =
+              result.error || "Đăng ký thất bại!";
+          }
+        });
+    </script>
+  </body>
+</html>

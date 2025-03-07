@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa món ăn</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .form-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      input[type="file"] {
+        border: none;
+        background: none;
+      }
+
+      .image-preview {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+
+      button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .save-btn {
+        background: #3498db;
+        color: white;
+        margin-right: 5px;
+      }
+
+      .cancel-btn {
+        background: #e74c3c;
+        color: white;
+        margin-left: 5px;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Chỉnh sửa Món Ăn</h2>
+      <form
+        action="/dashboard/dishes/edit/<%= dish._id %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+      <label for="category">Danh mục:</label>
+      <select id="category" name="category" style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px" required>
+        <% categories.forEach(category => { %>
+          <option value="<%= category._id %>" <%= dish.category.toString() === category._id.toString() ? "selected" : "" %>>
+            <%= category.name %>
+          </option>
+        <% }); %>
+      </select>
+        <label for="name">Tên món ăn:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= dish.name %>"
+          required
+        />
+
+        <label for="price">Giá:</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          value="<%= dish.price %>"
+          required
+        />
+
+        <label for="description">Mô tả:</label>
+        <textarea id="description" name="description">
+<%= dish.description %></textarea
+        >
+
+        <div class="image-preview">
+          <label>Hình ảnh hiện tại:</label>
+          <br />
+          <img
+            src="<%= dish.image %>"
+            width="150"
+            style="border-radius: 5px; margin-top: 5px"
+          />
+        </div>
+
+        <label for="image">Thay đổi ảnh:</label>
+        <input type="file" id="image" name="image" accept="image/*" />
+
+        <div class="button-container">
+          <button type="submit" class="save-btn">💾 Lưu</button>
+          <button
+            type="button"
+            class="cancel-btn"
+            onclick="window.history.back()"
+          >
+            ❌ Hủy
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

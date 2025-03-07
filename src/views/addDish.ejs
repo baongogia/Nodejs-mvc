@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm món ăn</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .form-container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+
+      label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      input[type="file"] {
+        border: none;
+        background: none;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+
+      button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .submit-btn {
+        background: #3498db;
+        color: white;
+        margin-right: 5px;
+      }
+
+      .cancel-btn {
+        background: #e74c3c;
+        color: white;
+        margin-left: 5px;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Thêm Món Ăn</h2>
+
+      <form
+        action="/dashboard/dishes/add"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <label>Danh mục:</label>
+        <select
+          name="category"
+          style="width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px"
+          required
+        >
+          <% categories.forEach(category => { %>
+          <option value="<%= category._id %>"><%= category.name %></option>
+          <% }); %>
+        </select>
+        <label for="name">Tên món ăn:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="Nhập tên món ăn"
+        />
+
+        <label for="price">Giá:</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          required
+          placeholder="Nhập giá (VNĐ)"
+        />
+
+        <label for="description">Mô tả:</label>
+        <textarea
+          id="description"
+          name="description"
+          placeholder="Nhập mô tả món ăn"
+        ></textarea>
+
+        <label for="image">Hình ảnh:</label>
+        <input type="file" id="image" name="image" accept="image/*" />
+
+        <div class="button-container">
+          <button type="submit" class="submit-btn">➕ Thêm</button>
+          <button
+            type="button"
+            class="cancel-btn"
+            onclick="window.history.back()"
+          >
+            ❌ Hủy
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
